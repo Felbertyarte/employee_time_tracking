@@ -8,6 +8,7 @@ public class modelbp {
     public employee_model EMPLOYEE_MODEL;
     public history_model HISTORY_MODEL;
     public salary_model SALARY_MODEL;
+    public user userbp;
     public modelbp(
     employee_model EMPLOYEE_MODEL,
     passcode_model PASSCODE_MODEL,

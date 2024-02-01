@@ -7,35 +7,34 @@ package model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import database.db;
 
 /**
  *
  * @author PCTRENDS
  */
-public class passcode_model {
-    db DB;
-    user_bp user;
+public class passcode_model extends database.db {
     public passcode_model() throws ClassNotFoundException, SQLException{
-        this.DB = new db();
     }
 
     
-    public boolean passcode_attemp_succ(String passcode) throws SQLException{
+    public boolean passcode_attemp_succ(String passcode){
         String SF = String.format("select * from user_table where passcode = %s", passcode);
-            ResultSet rs = DB.Rstatement(SF);
-            if (!rs.next()){
+            try (ResultSet rs = Rstatement(SF)) {
+                if (!rs.next()){
+                    return false;
+                }
+                else{
+                    return true;
+                }
+            } catch (SQLException e) {
                 return false;
-            }
-            else{
-                return true;
             }    
     }
     public boolean update_user_passcode_succ(String id,String passcode){
         String SF = String.format("update user_table set passcode = %s where ID = %s",passcode,id);
         System.out.println(SF);
         try {
-            DB.NRstatement(SF);
+            NRstatement(SF);
             return true;
         } catch (SQLException e) {
             System.out.println(e);
@@ -45,7 +44,7 @@ public class passcode_model {
     public boolean create_user_succ(String username,String passcode){
         String statement = String.format("insert into user_table(name,passcode)values(%s,%s)",username,passcode);
         try {
-            DB.NRstatement(statement);
+            NRstatement(statement);
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -54,6 +53,6 @@ public class passcode_model {
         
     }
     public ResultSet get_user() throws SQLException{
-        return DB.Rstatement("select * from user_table");
+        return Rstatement("select * from user_table");
     }
 }
